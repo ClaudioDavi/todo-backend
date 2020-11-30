@@ -5,18 +5,6 @@ from .serializers import TaskSerializer, TaskListSerializer
 from .models import Task, TaskList
 
 
-@api_view(["GET"])
-def apiOverview(request):
-    api_urls = {
-        "All Tasks": "GET: /tasks/",
-        "Create Task": "POST: /tasks/",
-        "Update Task": "PUT: /tasks/<str:key>/",
-        "View Task": "GET: /tasks/<str:key>/",
-        "Delete Task": "DELETE: /tasks/<str:key>/",
-    }
-    return Response(api_urls)
-
-
 @api_view(["GET", "POST"])
 def task(request):
     if request.method == "GET":
@@ -31,10 +19,8 @@ def task(request):
         except Exception as e:
             print(e)
             raise e
-        
-        
+
         return Response(serializer.data)
-    
 
 
 @api_view(["GET", "PUT", "DELETE"])
@@ -55,11 +41,11 @@ def single_task(request, key):
 
 @api_view(["GET", "POST"])
 def task_list(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         task_lists = TaskList.objects.all()
         serializer = TaskListSerializer(task_lists, many=True)
         return Response(serializer.data)
-    if request.method == 'POST':
+    if request.method == "POST":
         serializer = TaskListSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
