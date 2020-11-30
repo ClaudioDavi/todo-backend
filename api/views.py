@@ -7,6 +7,11 @@ from .models import Task, TaskList
 
 @api_view(["GET", "POST"])
 def task(request):
+    """
+    GET: Return All Tasks
+    POST: Creates new Task
+
+    """
     if request.method == "GET":
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True)
@@ -25,6 +30,11 @@ def task(request):
 
 @api_view(["GET", "PUT", "DELETE"])
 def single_task(request, key):
+    """
+    GET: Retunrs a specifc task
+    PUT: Edit a task
+    DELETE: Deletes a task
+    """
     tasks = Task.objects.get(id=key)
     if request.method == "GET":
         serializer = TaskSerializer(tasks, many=False)
@@ -41,6 +51,9 @@ def single_task(request, key):
 
 @api_view(["GET", "POST"])
 def task_list(request):
+    """
+    GET: return all tasks lists POST: Create new Task list
+    """
     if request.method == "GET":
         task_lists = TaskList.objects.all()
         serializer = TaskListSerializer(task_lists, many=True)
@@ -54,6 +67,9 @@ def task_list(request):
 
 @api_view(["GET", "PUT", "DELETE"])
 def single_task_list(request, key):
+    """
+    Read, Edit or Delete a specific Task List
+    """
     task_lists = TaskList.objects.get(id=key)
     if request.method == "GET":
         serializer = TaskListSerializer(task_lists, many=False)
@@ -66,3 +82,14 @@ def single_task_list(request, key):
     if request.method == "DELETE":
         task_lists.delete()
         return Response("Task List with Id {} deleted successfully".format(key))
+
+
+@api_view(["GET"])
+def get_tasks_by_task_list(request, key):
+    """
+    Get all tasks inside a task list.
+    """
+    if request.method == "GET":
+        tasks = Task.objects.filter(task_list__id=key)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)

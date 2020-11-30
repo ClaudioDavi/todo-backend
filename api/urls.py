@@ -25,4 +25,5 @@ urlpatterns = [
     path("tasks/<str:key>/", views.single_task, name="single-task"),
     path("task-lists/", views.task_list, name="task-list"),
     path("task-lists/<str:key>/", views.single_task_list, name="single-task-list"),
+    path("task-lists/<str:key>/tasks", views.get_tasks_by_task_list, name="tasks-by-task-list"),
 ]
